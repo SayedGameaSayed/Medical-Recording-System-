@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة المريض</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body class="patient-page">
+    <header class="header">
+        <div class="header-content">
+            <div>
+                <h1 class="header-title">بوابة المريض</h1>
+                <p class="header-subtitle">مرحباً، {{ session['name'] }}</p>
+            </div>
+            <div class="header-actions">
+                <button class="notification-btn" onclick="showNotifications()">
+                    🔔
+                    <span id="notificationBadge" class="notification-badge" style="display: none;">0</span>
+                </button>
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <button class="logout-btn" onclick="handleLogout()">
+                    ← تسجيل خروج
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="alert alert-info" id="infoAlert">
+            <span class="alert-icon">ℹ️</span>
+            <div class="alert-content">
+                <div class="alert-title">كيفية رفع ملفاتك الطبية</div>
+                <ul class="alert-list">
+                    <li>اختر نوع المستند من القائمة المنسدلة</li>
+                    <li>اسحب وأفلت ملفاتك في منطقة الرفع، أو انقر للتصفح</li>
+                    <li>الصيغ المقبولة: PDF, JPG, PNG, DICOM (بحد أقصى 10 ميجابايت)</li>
+                    <li>سيتمكن طبيبك من عرض وتحميل ملفاتك</li>
+                    <li>جميع الملفات مشفرة ومخزنة بشكل آمن</li>
+                </ul>
+            </div>
+            <button class="close-btn" onclick="closeAlert('infoAlert')">×</button>
+        </div>
+
+        <div class="alert alert-warning">
+            <span class="alert-icon">⚠️</span>
+            <div class="alert-content">
+                <p class="alert-text">يرجى التأكد من وضوح جميع المعلومات الشخصية في المستندات المرفوعة. يجب أن تكون الملفات واضحة ومضاءة جيداً.</p>
+            </div>
+        </div>
+        
+        <!-- قسم إضافة دكتور -->
+        <div class="card" style="margin-bottom: 24px;">
+            <h2 class="card-title">إعطاء صلاحية لطبيب</h2>
+            <p style="color: var(--text-secondary-light); margin-bottom: 20px;">
+                أدخل البريد الإلكتروني للطبيب الذي تريد منحه صلاحية الوصول إلى ملفاتك الطبية
+            </p>
+            
+            <div style="display: flex; gap: 12px;">
+                <input type="email" id="doctorEmail" class="form-input" placeholder="أدخل بريد الطبيب الإلكتروني" style="flex: 1;">
+                <button class="btn-primary" onclick="grantDoctorAccess()" style="width: auto; padding: 12px 24px;">
+                    إضافة طبيب
+                </button>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h2 class="card-title">رفع المستندات الطبية</h2>
+            ">
+                    <li>اختر نوع المستند من القائمة المنسدلة</li>
+                    <li>اسحب وأفلت ملفاتك في منطقة الرفع، أو انقر للتصفح</li>
+                    <li>الصيغ المقبولة: PDF, JPG, PNG, DICOM (بحد أقصى 10 ميجابايت)</li>
+                    <li>سيتمكن طبيبك من عرض وتحميل ملفاتك</li>
+                    <li>جميع الملفات مشفرة ومخزنة بشكل آمن</li>
+                </ul>
+            </div>
+           
+        </div>
+
+          <script>
+                function showNotifications() {
+                    alert('لا توجد إشعارات جديدة');
+                }
+            </script>
+        </body>
+        </html>
+
+        <div class="content-grid">
+            <div class="card">
+                <h2 class="card-title">رفع المستندات الطبية</h2>
+                
+                <label class="form-label">نوع المستند</label>
+                <select class="select-field" id="docType">
+                    <option>نتائج التحاليل</option>
+                    <option>الأشعة (X-Ray, MRI, CT)</option>
+                    <option>الوصفات الطبية</option>
+                    <option>التقارير الطبية</option>
+                    <option>مستندات أخرى</option>
+                </select>
+
+                <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                    <div class="upload-icon">📤</div>
+                    <div class="upload-text">اسحب وأفلت ملفاتك هنا</div>
+                    <div class="upload-subtext">أو انقر للتصفح</div>
+                </div>
+                <input type="file" id="fileInput" multiple style="display: none;">
+
+                <div class="uploaded-files" id="uploadedFiles" style="display: none;">
+                    <div class="files-header">
+                        <div class="files-title">الملفات المرفوعة (<span id="fileCount">0</span>)</div>
+                        <button class="clear-btn" onclick="clearFiles()">مسح الكل</button>
+                    </div>
+                    <div id="fileList"></div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <h3 class="sidebar-title">مستنداتك</h3>
+                <div class="doc-item">
+                    <span class="doc-label">إجمالي الملفات</span>
+                    <span class="doc-count" id="totalCount">0</span>
+                </div>
+                <div class="doc-item">
+                    <span class="doc-label">نتائج التحاليل</span>
+                    <span class="doc-count" id="labCount">0</span>
+                </div>
+                <div class="doc-item">
+                    <span class="doc-label">الأشعة</span>
+                    <span class="doc-count" id="imagingCount">0</span>
+                </div>
+                <div class="doc-item">
+                    <span class="doc-label">الوصفات</span>
+                    <span class="doc-count" id="prescriptionCount">0</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة السجلات الطبية - تسجيل الدخول</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="login-page">
+
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="تبديل الوضع">
+        <span class="theme-icon">🌙</span>
+    </button>
+    <button class="notification-btn" onclick="showNotifications()" style="position: relative;">
+        🔔
+        <span id="notificationBadge" class="notification-badge" style="display: none;">0</span>
+    </button>
+
+    <div class="login-container">
+        <div class="login-box">
+            <div class="logo-circle">📑</div>
+            <h1 class="login-title">دوسيه</h1>
+            <p class="login-subtitle"> {بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ...... وَإِذَا مَرِضْتُ فَهُوَ يَشْفِينِ (80) } سجلك الطبي في جيبك</p>
+
+            <!-- الفورم -->
+            <form onsubmit="event.preventDefault(); handleLogin();">
+
+                <label class="role-label">تسجيل الدخول كـ</label>
+                <div class="role-buttons">
+                    <button type="button" class="role-btn active" data-role="patient"
+                            onclick="selectRole('patient')">
+                        <span class="role-icon">👤</span>
+                        المريض
+                    </button>
+
+                    <button type="button" class="role-btn" data-role="doctor"
+                            onclick="selectRole('doctor')">
+                        <span class="role-icon">🧑‍⚕️</span>
+                        الطبيب
+                    </button>
+                </div>
+
+                <!-- role hidden input (kept for compatibility) -->
+                <input type="hidden" name="role" id="role" value="patient">
+
+                <div class="login-form">
+                    <div class="form-group">
+                        <label class="form-label">البريد الإلكتروني</label>
+                        <input type="email" name="email" class="form-input"
+                               placeholder="أدخل بريدك الإلكتروني" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">كلمة المرور</label>
+                        <input type="password" name="password" class="form-input"
+                               placeholder="أدخل كلمة المرور" required>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        تسجيل الدخول
+                    </button>
+                </div>
+            </form>
+
+            <div class="demo-info">
+                <div class="demo-title">الدخول المسجل مسبقا نتمنى لك الشفاء العاجل:</div>
+                <div class="demo-text">أدخل بريد الكتروني او رقم هاتف و كلمة سر مسجلين مسبقا</div>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <p style="color: var(--text-secondary-light); font-size: 14px;">
+                    ليس لديك حساب؟ 
+                    <a href="#" onclick="showRegisterForm(); return false;" style="color: var(--primary); text-decoration: none; font-weight: 600;">
+                        إنشاء حساب جديد
+                    </a>
+                </p>
+            </div>
+
+    </div>
+
+    <!-- نموذج التسجيل (مخفي في البداية) -->
+<div class="login-box" id="registerBox" style="display: none;">
+    <div class="logo-circle">📝</div>
+    <h1 class="login-title">إنشاء حساب جديد</h1>
+    <p class="login-subtitle">انضم إلى دوسيه اليوم</p>
+
+    <form onsubmit="event.preventDefault(); handleRegister();">
+        <label class="role-label">نوع الحساب</label>
+        <div class="role-buttons">
+            <button type="button" class="role-btn active" data-role="patient" onclick="selectRegisterRole('patient')">
+                <span class="role-icon">👤</span>
+                مريض
+            </button>
+            <button type="button" class="role-btn" data-role="doctor" onclick="selectRegisterRole('doctor')">
+                <span class="role-icon">🧑‍⚕️</span>
+                طبيب
+            </button>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">الاسم الكامل</label>
+            <input type="text" id="regName" class="form-input" placeholder="أدخل اسمك الكامل" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">البريد الإلكتروني</label>
+            <input type="email" id="regEmail" class="form-input" placeholder="أدخل بريدك الإلكتروني" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">كلمة المرور</label>
+            <input type="password" id="regPassword" class="form-input" placeholder="أدخل كلمة المرور" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">العمر</label>
+            <input type="number" id="regAge" class="form-input" placeholder="أدخل عمرك" min="1" max="120">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">رقم الهاتف</label>
+            <input type="tel" id="regPhone" class="form-input" placeholder="01xxxxxxxxx">
+        </div>
+
+        <button type="submit" class="btn-primary">إنشاء الحساب</button>
+    </form>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <p style="color: var(--text-secondary-light); font-size: 14px;">
+            لديك حساب بالفعل؟ 
+            <a href="#" onclick="showLoginForm(); return false;" style="color: var(--primary); text-decoration: none; font-weight: 600;">
+                تسجيل الدخول
+            </a>
+        </p>
+    </div>
+</div>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>

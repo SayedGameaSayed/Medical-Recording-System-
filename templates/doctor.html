@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة الطبيب</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body class="doctor-page">
+    <header class="header">
+        <div class="header-content">
+            <div>
+                <h1 class="header-title">بوابة الطبيب</h1>
+                <p class="header-subtitle">مرحباً، {{ session['name'] }}</p>
+            </div>
+            <div class="header-actions">
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <button class="logout-btn" onclick="handleLogout()">
+                    ← تسجيل خروج
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-info">
+                    <div class="stat-label">إجمالي المرضى</div>
+                    <div class="stat-value">5</div>
+                </div>
+                <div class="stat-icon blue">👁️</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-info">
+                    <div class="stat-label">إجمالي الملفات</div>
+                    <div class="stat-value">35</div>
+                </div>
+                <div class="stat-icon green">📄</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-info">
+                    <div class="stat-label">الرفوعات الحديثة</div>
+                    <div class="stat-value">اليوم: 12</div>
+                </div>
+                <div class="stat-icon purple">📅</div>
+            </div>
+        </div>
+
+        <div class="patients-card">
+            <h2 class="card-title">مرضاك</h2>
+            <input type="text" class="search-box" placeholder="ابحث عن المرضى بالاسم...">
+
+            <div class="patient-item">
+                <div class="patient-info">
+
+                
+            </div>
+
+            <div class="patient-item">
+                <div class="patient-info">
+                    
+            </div>
+
+            <div class="patient-item">
+                <div class="patient-info">
+                    
+            </div>
+
+            <div class="patient-item">
+                <div class="patient-info">
+                  
+            </div>
+
+            <div class="patient-item">
+                <div class="patient-info">
+                   
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>
