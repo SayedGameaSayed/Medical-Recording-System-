@@ -134,6 +134,8 @@ The application will be available at `http://localhost:5000`.
 - View document statistics
 - Grant specific doctors access to records
 
+<img width="757" height="455" alt="image" src="https://github.com/user-attachments/assets/057ac25e-a7ac-4101-b2b4-6e9961ddfbf1" />
+
 ### Doctor
 - Register and log in
 - View list of authorized patients
