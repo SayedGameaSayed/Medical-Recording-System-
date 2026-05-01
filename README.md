@@ -1,215 +1,257 @@
-# مشروع دوسيه - نظام السجلات الطبية
+# Dossier — Medical Records Management System
 
-## 📋 وصف المشروع
-نظام متكامل لإدارة السجلات الطبية يسمح للمرضى برفع ملفاتهم الطبية والدكاترة بالوصول إليها بعد الحصول على إذن.
+A full-stack web application that enables patients to securely upload and manage their medical records, and allows authorized doctors to access them with patient consent.
 
-## 🏗️ هيكل المشروع
+---
+
+## Table of Contents
+
+- [Project Structure](#project-structure)
+- [Prerequisites](#prerequisites)
+- [Getting Started](#getting-started)
+- [Configuration](#configuration)
+- [Demo Credentials](#demo-credentials)
+- [Features](#features)
+- [Database Schema](#database-schema)
+- [API Reference](#api-reference)
+- [Security](#security)
+- [Troubleshooting](#troubleshooting)
+- [Production Considerations](#production-considerations)
+
+---
+
+## Project Structure
 
 ```
 medical-records-system/
 │
-├── app.py                      # Flask Backend (الخادم الرئيسي)
-├── requirements.txt            # المكتبات المطلوبة
-├── database.sql               # ملف قاعدة البيانات
+├── app.py                  # Main Flask backend
+├── requirements.txt        # Python dependencies
+├── database.sql            # Database schema & seed data
 │
-├── templates/                 # صفحات HTML
-│   ├── index.html            # صفحة تسجيل الدخول
-│   ├── patient.html          # صفحة المريض
-│   └── doctor.html           # صفحة الدكتور
+├── templates/
+│   ├── index.html          # Login page
+│   ├── patient.html        # Patient dashboard
+│   └── doctor.html         # Doctor dashboard
 │
-├── static/                    # الملفات الثابتة
-│   ├── style.css             # ملف التنسيقات
-│   └── main.js               # ملف JavaScript
+├── static/
+│   ├── style.css           # Stylesheet
+│   └── main.js             # Frontend scripts
 │
-└── uploads/                   # مجلد تخزين الملفات المرفوعة (يُنشأ تلقائياً)
+└── uploads/                # Uploaded files (auto-created at runtime)
 ```
 
-## 🚀 خطوات التشغيل
+---
 
-### 1. تثبيت Python
-تأكد من تثبيت Python 3.8 أو أحدث على جهازك.
+## Prerequisites
 
-### 2. تثبيت MySQL
-- حمّل وثبّت [MySQL Community Server](https://dev.mysql.com/downloads/mysql/)
-- شغّل خدمة MySQL
+- Python 3.8+
+- MySQL Community Server
 
-### 3. إعداد قاعدة البيانات
+---
 
-افتح MySQL Command Line أو MySQL Workbench وشغّل الأوامر التالية:
+## Getting Started
 
-```sql
--- إنشاء قاعدة البيانات
-CREATE DATABASE medical_records CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+### 1. Clone the repository
 
--- استخدام قاعدة البيانات
-USE medical_records;
-
--- شغّل باقي أوامر SQL من ملف database.sql
+```bash
+git clone https://github.com/your-username/medical-records-system.git
+cd medical-records-system
 ```
 
-أو شغّل الملف مباشرة:
+### 2. Set up a virtual environment
+
+```bash
+python -m venv venv
+
+# macOS / Linux
+source venv/bin/activate
+
+# Windows
+venv\Scripts\activate
+```
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Set up the database
+
+Ensure MySQL is running, then execute:
+
 ```bash
 mysql -u root -p < database.sql
 ```
 
-### 4. تثبيت المكتبات المطلوبة
+Or manually run the following in your MySQL client:
 
-```bash
-# إنشاء بيئة افتراضية (اختياري لكن مُفضّل)
-python -m venv venv
-
-# تفعيل البيئة الافتراضية
-# على Windows:
-venv\Scripts\activate
-# على Mac/Linux:
-source venv/bin/activate
-
-# تثبيت المكتبات
-pip install -r requirements.txt
+```sql
+CREATE DATABASE medical_records CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE medical_records;
+-- Then run the remaining statements from database.sql
 ```
 
-### 5. تعديل إعدادات قاعدة البيانات
+### 5. Configure the application
 
-افتح ملف `app.py` وعدّل إعدادات الاتصال بقاعدة البيانات:
+Open `app.py` and update the database connection settings:
 
 ```python
 DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',
-    'password': 'كلمة_المرور_بتاعتك',  # ضع كلمة مرور MySQL هنا
+    'password': 'your_mysql_password',
     'database': 'medical_records'
 }
 ```
 
-### 6. تشغيل المشروع
+### 6. Run the application
 
 ```bash
 python app.py
 ```
 
-المشروع هيشتغل على: `http://localhost:5000`
+The application will be available at `http://localhost:5000`.
 
-## 👤 بيانات الدخول التجريبية
+---
 
-### مريض:
-- **البريد الإلكتروني:** patient1@test.com
-- **كلمة المرور:** password123
+## Demo Credentials
 
-### دكتور:
-- **البريد الإلكتروني:** doctor1@test.com
-- **كلمة المرور:** password123
+| Role    | Email               | Password    |
+|---------|---------------------|-------------|
+| Patient | patient1@test.com   | password123 |
+| Doctor  | doctor1@test.com    | password123 |
 
-## 🔧 الوظائف المتاحة
+---
 
-### للمريض:
-✅ تسجيل دخول/تسجيل حساب جديد
-✅ رفع المستندات الطبية (أشعة، تحاليل، روشتات، إلخ)
-✅ عرض المستندات الشخصية
-✅ إحصائيات المستندات
-✅ إعطاء صلاحية للدكتور للوصول للملفات
+## Features
 
-### للدكتور:
-✅ تسجيل دخول/تسجيل حساب جديد
-✅ عرض قائمة المرضى
-✅ عرض مستندات المرضى المصرح له بالوصول إليهم
-✅ إحصائيات المرضى والملفات
-✅ البحث عن المرضى
+### Patient
+- Register and log in
+- Upload medical documents (scans, lab results, prescriptions, etc.)
+- View personal documents
+- View document statistics
+- Grant specific doctors access to records
 
-## 🗄️ قاعدة البيانات
+### Doctor
+- Register and log in
+- View list of authorized patients
+- Access documents for permitted patients
+- View patient and file statistics
+- Search for patients
 
-### الجداول:
+---
 
-**1. users** - جدول المستخدمين
-- id: المعرّف الفريد
-- name: الاسم
-- email: البريد الإلكتروني
-- password: كلمة المرور (مُشفّرة)
-- role: الدور (patient/doctor)
-- age: العمر
-- phone: رقم الهاتف
+## Database Schema
 
-**2. medical_documents** - جدول المستندات الطبية
-- id: المعرّف الفريد
-- patient_id: معرّف المريض
-- document_type: نوع المستند
-- file_name: اسم الملف
-- file_path: مسار الملف
-- upload_date: تاريخ الرفع
+### `users`
+| Column   | Type    | Description                  |
+|----------|---------|------------------------------|
+| id       | INT     | Primary key                  |
+| name     | VARCHAR | Full name                    |
+| email    | VARCHAR | Email address                |
+| password | VARCHAR | Hashed password              |
+| role     | ENUM    | `patient` or `doctor`        |
+| age      | INT     | Age                          |
+| phone    | VARCHAR | Phone number                 |
 
-**3. doctor_patient_access** - جدول صلاحيات الوصول
-- id: المعرّف الفريد
-- doctor_id: معرّف الدكتور
-- patient_id: معرّف المريض
-- granted_date: تاريخ منح الصلاحية
+### `medical_documents`
+| Column        | Type     | Description         |
+|---------------|----------|---------------------|
+| id            | INT      | Primary key         |
+| patient_id    | INT      | Reference to user   |
+| document_type | VARCHAR  | Type of document    |
+| file_name     | VARCHAR  | Original file name  |
+| file_path     | VARCHAR  | Storage path        |
+| upload_date   | DATETIME | Upload timestamp    |
 
-## 📡 API Endpoints
+### `doctor_patient_access`
+| Column       | Type     | Description              |
+|--------------|----------|--------------------------|
+| id           | INT      | Primary key              |
+| doctor_id    | INT      | Reference to doctor user |
+| patient_id   | INT      | Reference to patient     |
+| granted_date | DATETIME | Access grant timestamp   |
+
+---
+
+## API Reference
 
 ### Authentication
-- `POST /api/register` - تسجيل مستخدم جديد
-- `POST /api/login` - تسجيل الدخول
-- `POST /api/logout` - تسجيل الخروج
 
-### Patient APIs
-- `POST /api/upload-document` - رفع مستند طبي
-- `GET /api/my-documents` - عرض مستنداتي
-- `GET /api/document-stats` - إحصائيات المستندات
-- `POST /api/grant-access` - إعطاء صلاحية لدكتور
+| Method | Endpoint       | Description          |
+|--------|----------------|----------------------|
+| POST   | /api/register  | Register a new user  |
+| POST   | /api/login     | Log in               |
+| POST   | /api/logout    | Log out              |
 
-### Doctor APIs
-- `GET /api/patients` - عرض قائمة المرضى
-- `GET /api/patient-documents/<patient_id>` - عرض مستندات مريض
-- `GET /api/doctor-stats` - إحصائيات الدكتور
+### Patient Endpoints
 
-## 🔐 الأمان
+| Method | Endpoint              | Description                     |
+|--------|-----------------------|---------------------------------|
+| POST   | /api/upload-document  | Upload a medical document       |
+| GET    | /api/my-documents     | Retrieve own documents          |
+| GET    | /api/document-stats   | Get document statistics         |
+| POST   | /api/grant-access     | Grant a doctor access           |
 
-- ✅ كلمات المرور مُشفّرة باستخدام `werkzeug.security`
-- ✅ نظام sessions للمصادقة
-- ✅ التحقق من صلاحيات الوصول
-- ✅ التحقق من أنواع الملفات المرفوعة
-- ✅ حماية من SQL Injection
+### Doctor Endpoints
 
-## 📝 ملاحظات مهمة
+| Method | Endpoint                           | Description                        |
+|--------|------------------------------------|------------------------------------|
+| GET    | /api/patients                      | List authorized patients           |
+| GET    | /api/patient-documents/<patient_id>| Get a patient's documents          |
+| GET    | /api/doctor-stats                  | Get doctor statistics              |
 
-1. **حجم الملفات:** الحد الأقصى للملف الواحد 10 ميجابايت
-2. **أنواع الملفات المسموحة:** PDF, JPG, PNG, DICOM
-3. **الترميز:** UTF-8 للدعم الكامل للغة العربية
-4. **الـ Session:** تنتهي عند إغلاق المتصفح
+---
 
-## 🐛 حل المشاكل الشائعة
+## Security
 
-### مشكلة الاتصال بـ MySQL
+- Passwords are hashed using `werkzeug.security`
+- Session-based authentication
+- Role-based access control on all endpoints
+- File type validation on upload
+- Protection against SQL injection via parameterized queries
+
+**File upload limits:**
+- Maximum file size: **10 MB**
+- Allowed formats: `PDF`, `JPG`, `PNG`, `DICOM`
+
+---
+
+## Troubleshooting
+
+**MySQL service not running**
+
 ```bash
-# تأكد من تشغيل خدمة MySQL
-# Windows:
+# Windows
 net start MySQL80
 
-# Linux/Mac:
+# macOS / Linux
 sudo systemctl start mysql
 ```
 
-### مشكلة تثبيت mysql-connector-python
+**`mysql-connector-python` installation fails**
+
 ```bash
 pip install mysql-connector-python --upgrade
 ```
 
-### خطأ في رفع الملفات
-- تأكد من وجود مجلد `uploads/`
-- تأكد من صلاحيات الكتابة على المجلد
+**File upload errors**
 
-## 📧 التواصل والدعم
-
-لأي استفسارات أو مشاكل، يمكنك:
-- فتح issue على GitHub
-- مراجعة الكود والتعليقات
-- التواصل مع المطور
+- Confirm the `uploads/` directory exists at the project root
+- Confirm the directory has write permissions
 
 ---
 
-**ملحوظة:** هذا مشروع تعليمي. للاستخدام في بيئة إنتاجية حقيقية، يُنصح بإضافة:
-- HTTPS
-- Rate limiting
-- Database connection pooling
-- Better error handling
-- Logging system
-- File virus scanning
-- Backup system
+## Production Considerations
+
+This project is intended for educational purposes. Before deploying to a production environment, the following should be addressed:
+
+- Enable HTTPS (TLS/SSL)
+- Implement rate limiting
+- Add database connection pooling
+- Improve error handling and logging
+- Integrate file virus scanning
+- Set up automated database backups
+- Use environment variables for all secrets (never hardcode credentials)
